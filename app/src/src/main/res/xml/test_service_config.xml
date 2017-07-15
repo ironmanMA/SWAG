@@ -1,0 +1,7 @@
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+android:accessibilityEventTypes="typeWindowContentChanged|typeWindowStateChanged"
+android:packageNames="com.android.chrome,com.whatsapp,com.facebook,com.zomato"
+android:accessibilityFeedbackType="feedbackGeneric"
+android:notificationTimeout="100"
+android:canRetrieveWindowContent="true"
+android:accessibilityFlags="flagDefault|flagIncludeNotImportantViews|flagReportViewIds|flagRequestEnhancedWebAccessibility|flagRetrieveInteractiveWindows" />
