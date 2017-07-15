@@ -25,6 +25,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import android.R;
@@ -38,6 +39,9 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 
 import java.util.Locale;
+
+import static com.swiggy.swag.swagapp.common.KeywordExtractor.intersect;
+import static com.swiggy.swag.swagapp.common.StopWordRemoval.removeStopWords;
 
 public abstract class AccessibilityEventCaptureService extends AccessibilityService {
 
@@ -62,7 +66,12 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
         }
         System.out.println(final_text);
         Log.i(new Date() + " TEXT : ", final_text);
-        final_text.toString();
+
+        HashMap <String,Double> final_map= intersect(removeStopWords(final_text));
+
+        /*
+           get top 5 of the final_map
+         */
 
 
         NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);

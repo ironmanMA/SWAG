@@ -1,0 +1,95 @@
+{
+    "took": 14,
+    "timed_out": false,
+    "_shards": {
+        "total": 5,
+        "successful": 5,
+        "failed": 0
+    },
+    "hits": {
+        "total": 1,
+        "max_score": 0.6152894,
+        "hits": [
+            {
+                "_index": "swag_menu",
+                "_type": "menu",
+                "_id": "AV1IckJkHCMEASA9nfps",
+                "_score": 0.6152894,
+                "_source": {
+                    "items": [
+                        {
+                            "restaurantName": "Pizza Stop",
+                            "foodImgSrc": "https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/vq6ouezjeplbpfspjmub",
+                            "restaurantRating": "3.3",
+                            "foodPrice": "180",
+                            "restaurantDeliveryTime": "41",
+                            "restaurantReviewCount": "1819",
+                            "foodDesc": "Fresh tomato sauce, mozzarella, onion.",
+                            "foodTitle": "P-1 Bellassai Pizza"
+                        },
+                        {
+                            "restaurantName": "Pizza Stop",
+                            "foodImgSrc": "https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/ey2ltvqvzjzscgil5qnn",
+                            "restaurantRating": "3.3",
+                            "foodPrice": "220",
+                            "restaurantDeliveryTime": "41",
+                            "restaurantReviewCount": "1819",
+                            "foodDesc": "Spicy tomato sauce with italian herbs, mushrooms, onion, capsicum, cottage cheese and coriander.",
+                            "foodTitle": "P-3 Fantasy Pizza"
+                        },
+                        {
+                            "restaurantName": "Pizza Stop",
+                            "foodImgSrc": "https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/cyljrpzkygmlmy9u0tyl",
+                            "restaurantRating": "3.3",
+                            "foodPrice": "210",
+                            "restaurantDeliveryTime": "41",
+                            "restaurantReviewCount": "1819",
+                            "foodDesc": "Spicy tomato sauce with italian herbs, mozzarella, onion, capsicum.",
+                            "foodTitle": "P-5 Indian Pizza"
+                        },
+                        {
+                            "restaurantName": "Pizza Stop",
+                            "foodImgSrc": "https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/yvjw6ec9ndtgkar4dptz",
+                            "restaurantRating": "3.3",
+                            "foodPrice": "220",
+                            "restaurantDeliveryTime": "41",
+                            "restaurantReviewCount": "1819",
+                            "foodDesc": "Spicy tomato sauce with italian herbs, corn, capsicum, tomato cubes, mozzarella and onion.",
+                            "foodTitle": "P-6 Manali Pizza"
+                        },
+                        {
+                            "restaurantName": "Pizza Stop",
+                            "foodImgSrc": "https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/txn9g8lvpsd1pmolr0hz",
+                            "restaurantRating": "3.3",
+                            "foodPrice": "180",
+                            "restaurantDeliveryTime": "41",
+                            "restaurantReviewCount": "1819",
+                            "foodDesc": "Fresh tomato sauce, mozzarella and basil.",
+                            "foodTitle": "P-7 Margherita Pizza"
+                        },
+                        {
+                            "restaurantName": "Pizza Stop",
+                            "foodImgSrc": "https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/iayz3vgc0ep2u5yrcnkm",
+                            "restaurantRating": "3.3",
+                            "foodPrice": "220",
+                            "restaurantDeliveryTime": "41",
+                            "restaurantReviewCount": "1819",
+                            "foodDesc": "Spicy tomato sauce with italian herbs, cheese, onion, spinach, garlic.",
+                            "foodTitle": "P-12 Spinichi Pizza"
+                        },
+                        {
+                            "restaurantName": "Pizza Stop",
+                            "foodImgSrc": "https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/r8ba2gtlheqf6u0cqo9k",
+                            "restaurantRating": "3.3",
+                            "foodPrice": "100",
+                            "restaurantDeliveryTime": "41",
+                            "restaurantReviewCount": "1819",
+                            "foodDesc": "",
+                            "foodTitle": "P-61 French Fries"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
