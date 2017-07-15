@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class ApacheHttpClientGet {
 			// System.out.println(each_word.getKey() + "/" + each_word.getValue());
 			try {
 				DefaultHttpClient httpClient = new DefaultHttpClient();
-				HttpPost postRequest = new HttpPost(base_url+each_word);
+				HttpPost postRequest = new HttpPost(base_url+ URLEncoder.encode(each_word.getKey(), "UTF-8"));
 				StringEntity input = new StringEntity("{}");
 				input.setContentType("application/json");
 				postRequest.setEntity(input);
