@@ -8,12 +8,16 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Parcelable;
+import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -40,6 +44,7 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
     public static final int EXTRA_TYPE_NOTIFICATION = 0x19;
     public static final String separator = " ";
 
+    int notifyID = 1;
     public static String TAG = AccessibilityEventCaptureService.class.getSimpleName();
     ArrayList<AccessibilityNodeInfo> textViewNodes = new ArrayList<AccessibilityNodeInfo>();
 
@@ -58,6 +63,36 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
         System.out.println(final_text);
         Log.i(new Date() + " TEXT : ", final_text);
         final_text.toString();
+
+
+        NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        Notification.Builder builder = new Notification.Builder(this);
+        Intent notificationIntent = new Intent(this, SwipeDeckActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
+
+        builder.setContentIntent(contentIntent);
+        builder.setSmallIcon(R.drawable.sym_def_app_icon);
+        builder.setContentText("We have found pretty good recommendations for you !!");
+        builder.setContentTitle("EAT WITH SWAG");
+        builder.setAutoCancel(true);
+        builder.setDefaults(Notification.DEFAULT_ALL);
+
+        Notification notification = builder.build();
+
+        NotificationManager nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        StatusBarNotification[] notifications =
+                nManager.getActiveNotifications();
+
+        boolean isPresent=false;
+        for (StatusBarNotification currentNotification : notifications) {
+            if (currentNotification.getId() == 1) {
+                isPresent=true;
+                break;
+            }
+        }
+        if(!isPresent)
+            nm.notify(notifyID,notification);
+
     }
 
     private void findChildViews(AccessibilityNodeInfo parentView) {
