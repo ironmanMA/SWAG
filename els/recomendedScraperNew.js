@@ -26,6 +26,17 @@ jQuery(".recommended-items .repeat-wrapper").each(function( index ) {
 // JSON.stringify(recommendedItems);
 
 for(var category in App.menu.categories){
+	if(App.menu.categories[category]["subCategories"] != null){
+		for(var subCategory in App.menu.categories[category]["subCategories"]){
+			for(var menuItem in App.menu.categories[category]["subCategories"][subCategory]["menu"]){
+				// console.log(App.menu.categories[category]["menu"][menuItem])
+				for(var dish in recommendedItems){
+					if (recommendedItems[dish]["foodTitle"]===App.menu.categories[category]["menu"][menuItem]["name"])
+						recommendedItems[dish]["foodDesc"]=App.menu.categories[category]["menu"][menuItem]["description"]
+				}
+			}
+		}
+	}else{
 		for(var menuItem in App.menu.categories[category]["menu"]){
 			// console.log(App.menu.categories[category]["menu"][menuItem])
 			for(var dish in recommendedItems){
@@ -33,6 +44,7 @@ for(var category in App.menu.categories){
 					recommendedItems[dish]["foodDesc"]=App.menu.categories[category]["menu"][menuItem]["description"]
 			}
 		}
+	}
 
 }
 
