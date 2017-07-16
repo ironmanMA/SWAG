@@ -12,14 +12,6 @@ import java.io.Serializable;
  * Created by gaurav on 7/16/17.
  */
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
-
 /**
  * Created by gaurav on 7/16/17.
  */
@@ -47,6 +39,16 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
     @SerializedName("foodPrice")
     String dishPrice;
 
+    @SerializedName("likenessScore")
+    String likenessScore;
+
+    public String getLikenessScore() {
+        return likenessScore;
+    }
+
+    public void setLikenessScore(String likenessScore) {
+        this.likenessScore = likenessScore;
+    }
 
     public RecommendedDishResponseDAO() {
     }
@@ -59,6 +61,7 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
         restaurantReviewCount = in.readString();
         hotelEstimateDeliveryTime = in.readString();
         dishPrice = in.readString();
+        likenessScore=in.readString();
     }
 
     public static final Creator<RecommendedDishResponseDAO> CREATOR = new Creator<RecommendedDishResponseDAO>() {
@@ -148,6 +151,7 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
         dest.writeString(restaurantReviewCount);
         dest.writeString(hotelEstimateDeliveryTime);
         dest.writeString(dishPrice);
+        dest.writeString(likenessScore);
     }
 }
 

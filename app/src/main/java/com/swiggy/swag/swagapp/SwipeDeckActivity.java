@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,10 +21,6 @@ import com.daprlabs.cardstack.SwipeDeck;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +32,14 @@ public class SwipeDeckActivity extends AppCompatActivity {
     Gson gson = new Gson();
     private SwipeDeckAdapter adapter;
     final List<RecommendedDishResponseDAO> selectedDishes = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe_deck);
         cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
         cardStack.setHardwareAccelerationEnabled(true);
+
 
         // Get data from server
         new RecommendedDishList().execute();
@@ -103,21 +102,24 @@ public class SwipeDeckActivity extends AppCompatActivity {
                 v = inflater.inflate(R.layout.dish_card, parent, false);
             }
             //((TextView) v.findViewById(R.id.textView2)).setText(data.get(position));
-            TextView restaurantNametextView = (TextView) v.findViewById(R.id.restaurantNameTextView);
-            restaurantNametextView.setText("Restaurant Name : " + data.get(position).getRestaurant());
-            TextView restaurantRatingtextView = (TextView) v.findViewById(R.id.restaurantRatingTextView);
-            restaurantRatingtextView.setText("Restaurant Rating : " + data.get(position).getRestaurantRating());
-            TextView restaurantReviewCountTextView = (TextView) v.findViewById(R.id.restaurantReviewCountTextView);
-            restaurantReviewCountTextView.setText("Restaurant Review Count : " + data.get(position).getRestaurantReviewCount());
-            TextView restaurantDeliveryTimeTextView = (TextView) v.findViewById(R.id.restaurantDeliveryTimeTextView);
-            restaurantDeliveryTimeTextView.setText("Estimated delivery time : "  + data.get(position).getHotelEstimateDeliveryTime());
-            TextView foodTitleTextView = (TextView) v.findViewById(R.id.foodTitleTextView);
-            foodTitleTextView.setText("Dish Name  : "  + data.get(position).getDishName());
-            TextView foodPriceTextView = (TextView) v.findViewById(R.id.foodPriceTextView);
-            foodPriceTextView.setText("Dish cost : " + data.get(position).getDishPrice());
+            TextView restaurantNametextView = (TextView) v.findViewById(R.id.restaurantName);
+            restaurantNametextView.setText( data.get(position).getRestaurant()+" ("+data.get(position).getRestaurantReviewCount()+")");
+
+            TextView restaurantRatingtextView = (TextView) v.findViewById(R.id.restaurantRating);
+            restaurantRatingtextView.setText("* " + data.get(position).getRestaurantRating());
+
+            TextView restaurantDeliveryTimeTextView = (TextView) v.findViewById(R.id.deliveryTime);
+            restaurantDeliveryTimeTextView.setText(data.get(position).getHotelEstimateDeliveryTime()+" min");
+
+            TextView foodTitleTextView = (TextView) v.findViewById(R.id.dishName);
+            foodTitleTextView.setText(data.get(position).getDishName());
+
+            TextView foodPriceTextView = (TextView) v.findViewById(R.id.foodCost);
+            foodPriceTextView.setText("Rs " + data.get(position).getDishPrice()+"/-");
+
             ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
             String imageUrl = data.get(position).getImageUrl().toString();
-            if(imageUrl!=null)
+            if (imageUrl != null)
                 Picasso.with(context).load(imageUrl).fit().centerCrop().into(imageView);
             else
                 Picasso.with(context).load(R.drawable.food).fit().centerCrop().into(imageView);
@@ -133,10 +135,11 @@ public class SwipeDeckActivity extends AppCompatActivity {
             return v;
         }
     }
+
     private class RecommendedDishList extends AsyncTask<Void, Void, List<RecommendedDishResponseDAO>> {
 
         @Override
-        protected void onPostExecute( final List<RecommendedDishResponseDAO> responseData) {
+        protected void onPostExecute(final List<RecommendedDishResponseDAO> responseData) {
             adapter = new SwipeDeckAdapter(responseData, getApplicationContext());
             cardStack.setAdapter(adapter);
 
@@ -157,7 +160,7 @@ public class SwipeDeckActivity extends AppCompatActivity {
                     LayoutInflater inflater = getLayoutInflater();
                     // normally use a viewholder
                     ViewGroup view = (ViewGroup) findViewById(android.R.id.content);
-                    View v = inflater.inflate(R.layout.no_dish_layout,view);
+                    View v = inflater.inflate(R.layout.no_dish_layout, view);
                     ImageView imageView = (ImageView) v.findViewById(R.id.not_available);
                     Picasso.with(context).load(R.drawable.not_available).fit().centerCrop().into(imageView);
                     Log.i("MainActivity", "no more cards");
@@ -182,7 +185,17 @@ public class SwipeDeckActivity extends AppCompatActivity {
             checkoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v("SELECTED DISHES SIZE : " , selectedDishes.get(0).getDishName());
+                    Log.v("SELECTED DISHES SIZE : ", selectedDishes.get(0).getDishName());
+                    Intent checkout_intent = new Intent(getApplicationContext(), CheckoutPage.class);
+                    checkout_intent.putParcelableArrayListExtra("selectedDishes", (ArrayList<RecommendedDishResponseDAO>) selectedDishes);
+                    startActivity(checkout_intent);
+                }
+            });
+            FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("SELECTED DISHES SIZE : ", selectedDishes.get(0).getDishName());
                     Intent checkout_intent = new Intent(getApplicationContext(), CheckoutPage.class);
                     checkout_intent.putParcelableArrayListExtra("selectedDishes", (ArrayList<RecommendedDishResponseDAO>) selectedDishes);
                     startActivity(checkout_intent);
@@ -192,34 +205,34 @@ public class SwipeDeckActivity extends AppCompatActivity {
 
         @Override
         protected List<RecommendedDishResponseDAO> doInBackground(Void... params) {
-            ArrayList<RecommendedDishResponseDAO> responseData=new ArrayList<>();
+            ArrayList<RecommendedDishResponseDAO> responseData = new ArrayList<>();
             JSONParser jParser = new JSONParser();
 
             /*Uncomment to flow data from server instead of static data*/
             //String url = "endpoint_URL";
             //String jsonStr = jParser.getJSONFromUrl(url);
 
-            String jsonStr = "[{\"restaurantName\":\"Cream Stone\",\"restaurantRating\":\"4.1\",\"restaurantReviewCount\":\"2940\",\"restaurantDeliveryTime\":\"41\",\"foodImgSrc\":\"https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/x3pox2gzd2xhijyfip1w\",\"foodTitle\":\"Willy Wonka\",\"foodPrice\":\"110\"}]";
-            if (jsonStr != null) {
-                try {
-                    JSONArray allMenuItems = new JSONArray(jsonStr);
-                    //JSONArray allMenuItems = jsonObj.getJSONArray("menu_items");
-                    for (int i = 0; i < allMenuItems.length(); i++) {
-                        JSONObject currentObject =  allMenuItems.getJSONObject(i);
-                        String id = currentObject.get("id").toString();
-                        String restaurant = currentObject.get("restaurant").toString();
-                        RecommendedDishResponseDAO recommendedDishResponseDAO=new RecommendedDishResponseDAO();
-//                        recommendedDishResponseDAO.setId(id);
-                        recommendedDishResponseDAO.setRestaurant(restaurant);
-                        String jsonString  = currentObject.toString();
-                        recommendedDishResponseDAO = gson.fromJson(jsonString, RecommendedDishResponseDAO.class);
-                        responseData.add(recommendedDishResponseDAO);
-                    }
-                }
-                catch (JSONException e){
-                    Log.e("NOTIFICATION ERROR ",e.toString());
-                }
-            }
+            ArrayList<RecommendedDishResponseDAO> list = getIntent().getParcelableArrayListExtra("MY_DATA");
+            responseData.addAll(list);
+//            if (jsonStr != null) {
+//                try {
+//                    JSONArray allMenuItems = new JSONArray(jsonStr);
+//                    //JSONArray allMenuItems = jsonObj.getJSONArray("menu_items");
+//                    for (int i = 0; i < allMenuItems.length(); i++) {
+//                        JSONObject currentObject = allMenuItems.getJSONObject(i);
+////                        String id = currentObject.get("id").toString();
+////                        String restaurant = currentObject.get("restaurant").toString();
+//                        RecommendedDishResponseDAO recommendedDishResponseDAO = new RecommendedDishResponseDAO();
+////                        recommendedDishResponseDAO.setId(id);
+////                        recommendedDishResponseDAO.setRestaurant(restaurant);
+//                        String jsonString = currentObject.toString();
+//                        recommendedDishResponseDAO = gson.fromJson(jsonString, RecommendedDishResponseDAO.class);
+//                        responseData.add(recommendedDishResponseDAO);
+//                    }
+//                } catch (JSONException e) {
+//                    Log.e("NOTIFICATION ERROR ", e.toString());
+//                }
+//            }
 
             return responseData;
         }

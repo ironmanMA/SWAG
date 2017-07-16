@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/test_service_status"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="150dp" />
 
     <Button
         android:id="@+id/setting"

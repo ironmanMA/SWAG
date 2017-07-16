@@ -7,7 +7,7 @@
     <ListView
         android:id="@+id/selectedDishList"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="350dp"
         android:background="#DDDDDDEE"
         android:divider="#FFFF"
         android:dividerHeight="1dp"
@@ -18,7 +18,7 @@
         android:layout_weight="0.47" />
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="75dp"
         android:orientation="horizontal"
         android:weightSum="1"
         android:paddingLeft="5dp"
@@ -34,13 +34,34 @@
         android:text="TOTAL : "
         android:id="@+id/totalPriceLabel" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:gravity="center"
-        android:text="0.0"
-        android:id="@+id/totalCalculatedCostTextView"
-        />
+        <TextView
+            android:id="@+id/totalCalculatedCostTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="0.0"
+            android:textStyle="bold" />
 </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:lineSpacingExtra="8sp"
+            android:text="PLACE ORDER"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 </LinearLayout>

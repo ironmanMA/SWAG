@@ -8,28 +8,37 @@
     android:orientation="vertical">
 
 
-    <com.daprlabs.cardstack.SwipeDeck
-        android:id="@+id/swipe_deck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="80dp"
-        android:paddingTop="20dp"
-        swipedeck:card_spacing="10dp"
-        swipedeck:max_visible="2"
-        swipedeck:render_above="true"
-        swipedeck:rotation_degrees="15"
-        swipedeck:opacity_end="0.1"
-        />
-
-
     <Button
         android:id="@+id/CheckoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
+        android:layout_gravity="center"
         android:text="Checkout" />
 
 
+    <com.daprlabs.cardstack.SwipeDeck
+        android:id="@+id/swipe_deck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:paddingTop="15dp"
+        swipedeck:card_spacing="10dp"
+        swipedeck:max_visible="2"
+        swipedeck:opacity_end="0.1"
+        swipedeck:render_above="true"
+        swipedeck:rotation_degrees="15" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_margin="5dp"
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:clickable="true"
+
+        swipedeck:backgroundTint="@color/cardview_dark_background"
+        swipedeck:elevation="30dp"
+        swipedeck:srcCompat="?android:attr/colorActivatedHighlight" />
 
 
 </com.daprlabs.cardstack.SwipeFrameLayout>
