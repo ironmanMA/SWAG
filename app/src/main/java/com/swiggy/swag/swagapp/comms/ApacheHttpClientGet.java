@@ -128,7 +128,7 @@ public class ApacheHttpClientGet {
                 JsonObject jsonObject2 = jsonElement.getAsJsonObject().getAsJsonObject("_source");
                 RecommendedDishResponseDAO recommendedDishResponseDAO =
                         gson.fromJson(jsonObject2.toString(), RecommendedDishResponseDAO.class);
-                recommendedDishResponseDAO.setLikenessScore(jsonElement.getAsJsonObject().get("_score").toString());
+                recommendedDishResponseDAO.setLikenessScore(Double.parseDouble(jsonElement.getAsJsonObject().get("_score").toString()));
                 recommendedDishResponseDAOList.add(recommendedDishResponseDAO);
             }
         }

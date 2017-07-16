@@ -17,6 +17,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -51,31 +53,44 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
             if (mNode.getContentDescription() != null)
                 final_text += separator + mNode.getContentDescription().toString();
         }
-        System.out.println(final_text);
+
         Log.i(new Date() + " TEXT : ", final_text);
 
         HashMap<String, Double> final_map = intersect(removeStopWords(final_text));
         KEYWORD_CACHE.putAll(final_map);
 
-        if (KEYWORD_CACHE.size() > 10) {
+        if (KEYWORD_CACHE.size() > 15) {
         /*
            get top 5 of the final_map
          */
-            List<Map.Entry<String, Double>> greatest = findGreatest(KEYWORD_CACHE, 1);
+            List<Map.Entry<String, Double>> greatest = findGreatest(KEYWORD_CACHE, 3);
 
             for (Map.Entry<String, Double> entry : greatest) {
                 // call elasticSearch here
                 Log.i("FOR_ELS", entry.getKey() + ", " + entry.getValue());
-                System.out.println(entry);
-                String response= elasticSearchCall(entry.getKey());
+                String response = elasticSearchCall(entry.getKey());
 //                String response = elasticSearchCall("pizza");
                 recommendedDishResponseDAOs.addAll(esToDao(response));
             }
 
+            /*
+            filter top10
+             */
+            Collections.sort(recommendedDishResponseDAOs, new Comparator<RecommendedDishResponseDAO>() {
+
+                public int compare(RecommendedDishResponseDAO o1, RecommendedDishResponseDAO o2) {
+                    return o2.getLikenessScore().compareTo(o1.getLikenessScore());
+                }
+            });
+
+            ArrayList<RecommendedDishResponseDAO> top10RecommendedDishResponseDAOs = new ArrayList<>(
+                    recommendedDishResponseDAOs.subList(0, Math.min(recommendedDishResponseDAOs.size(), 10))
+            );
+
             NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             Notification.Builder builder = new Notification.Builder(this);
             Intent notificationIntent = new Intent(this, SwipeDeckActivity.class);
-            notificationIntent.putParcelableArrayListExtra("MY_DATA", recommendedDishResponseDAOs);
+            notificationIntent.putParcelableArrayListExtra("MY_DATA", top10RecommendedDishResponseDAOs);
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
             builder.setContentIntent(contentIntent);
@@ -98,7 +113,7 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
                     break;
                 }
             }
-            if (!isPresent && recommendedDishResponseDAOs.size()>5) {
+            if (!isPresent && recommendedDishResponseDAOs.size() > 10) {
                 nm.notify(notifyID, notification);
                 KEYWORD_CACHE.clear();
 //                recommendedDishResponseDAOs.clear();

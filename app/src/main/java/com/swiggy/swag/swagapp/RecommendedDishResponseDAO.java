@@ -40,13 +40,13 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
     String dishPrice;
 
     @SerializedName("likenessScore")
-    String likenessScore;
+    Double likenessScore;
 
-    public String getLikenessScore() {
+    public Double getLikenessScore() {
         return likenessScore;
     }
 
-    public void setLikenessScore(String likenessScore) {
+    public void setLikenessScore(Double likenessScore) {
         this.likenessScore = likenessScore;
     }
 
@@ -61,7 +61,7 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
         restaurantReviewCount = in.readString();
         hotelEstimateDeliveryTime = in.readString();
         dishPrice = in.readString();
-        likenessScore=in.readString();
+        likenessScore=Double.parseDouble(in.readString());
     }
 
     public static final Creator<RecommendedDishResponseDAO> CREATOR = new Creator<RecommendedDishResponseDAO>() {
@@ -151,7 +151,7 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
         dest.writeString(restaurantReviewCount);
         dest.writeString(hotelEstimateDeliveryTime);
         dest.writeString(dishPrice);
-        dest.writeString(likenessScore);
+        dest.writeString(likenessScore.toString());
     }
 }
 

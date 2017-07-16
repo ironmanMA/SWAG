@@ -1,8 +1,15 @@
 package com.swiggy.swag.swagapp.common;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import static com.swiggy.swag.swagapp.common.StopWordRemoval.removeStopWords;
 
@@ -97,11 +104,9 @@ public class KeywordExtractor {
         return result;
     }
 
-
     public static void main(String[] args) {
         String str = "Excellent service..friendly staff...the Italian pizza was really delicious. ..toooo damn good...Pasta was yummy too....pasta which i ordered was dry..without grumbling the chef took it back and made it saucy..and as i couldnt finish the pasta they neatly packed the leftover..without me asking them to..worth the money..affordable...";
         HashMap<String, Double> curated_words = removeStopWords(str);
         HashMap<String, Double> final_map = intersect(curated_words);
-        System.out.println(final_map);
     }
 }

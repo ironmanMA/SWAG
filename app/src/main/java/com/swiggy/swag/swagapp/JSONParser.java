@@ -3,19 +3,16 @@ package com.swiggy.swag.swagapp;
 /**
  * Created by gaurav on 7/16/17.
  */
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 class JSONParser {
 
@@ -45,7 +42,6 @@ class JSONParser {
             }
             is.close();
             json = sb.toString();
-            System.out.println("sb:"+sb);
             Log.e("DATA","Here is data "+sb);
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
@@ -69,7 +65,6 @@ class JSONParser {
             }
             is.close();
             json = sb.toString();
-            System.out.println("sb:"+sb);
             Log.e("DATA","Here is data "+sb);
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());

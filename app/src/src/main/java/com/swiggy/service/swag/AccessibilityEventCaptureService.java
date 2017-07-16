@@ -51,7 +51,6 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
             if (mNode.getContentDescription() != null)
                 final_text += separator + mNode.getContentDescription().toString();
         }
-        System.out.println(final_text);
         Log.i(new Date() + " TEXT : ", final_text);
         final_text.toString();
     }
