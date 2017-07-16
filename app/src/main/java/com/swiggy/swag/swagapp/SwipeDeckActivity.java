@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daprlabs.cardstack.SwipeDeck;
 import com.google.gson.Gson;
@@ -103,19 +103,19 @@ public class SwipeDeckActivity extends AppCompatActivity {
             }
             //((TextView) v.findViewById(R.id.textView2)).setText(data.get(position));
             TextView restaurantNametextView = (TextView) v.findViewById(R.id.restaurantName);
-            restaurantNametextView.setText( data.get(position).getRestaurant()+" ("+data.get(position).getRestaurantReviewCount()+")");
+            restaurantNametextView.setText(data.get(position).getRestaurant() + " (" + data.get(position).getRestaurantReviewCount() + ")");
 
             TextView restaurantRatingtextView = (TextView) v.findViewById(R.id.restaurantRating);
             restaurantRatingtextView.setText("* " + data.get(position).getRestaurantRating());
 
             TextView restaurantDeliveryTimeTextView = (TextView) v.findViewById(R.id.deliveryTime);
-            restaurantDeliveryTimeTextView.setText(data.get(position).getHotelEstimateDeliveryTime()+" min");
+            restaurantDeliveryTimeTextView.setText(data.get(position).getHotelEstimateDeliveryTime() + " min");
 
             TextView foodTitleTextView = (TextView) v.findViewById(R.id.dishName);
             foodTitleTextView.setText(data.get(position).getDishName());
 
             TextView foodPriceTextView = (TextView) v.findViewById(R.id.foodCost);
-            foodPriceTextView.setText("Rs " + data.get(position).getDishPrice()+"/-");
+            foodPriceTextView.setText("Rs " + data.get(position).getDishPrice() + "/-");
 
             ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
             String imageUrl = data.get(position).getImageUrl().toString();
@@ -181,24 +181,34 @@ public class SwipeDeckActivity extends AppCompatActivity {
             cardStack.setRightImage(R.id.right_image);
 
 
-            Button checkoutButton = (Button) findViewById(R.id.CheckoutButton);
-            checkoutButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v("SELECTED DISHES SIZE : ", selectedDishes.get(0).getDishName());
-                    Intent checkout_intent = new Intent(getApplicationContext(), CheckoutPage.class);
-                    checkout_intent.putParcelableArrayListExtra("selectedDishes", (ArrayList<RecommendedDishResponseDAO>) selectedDishes);
-                    startActivity(checkout_intent);
-                }
-            });
+//            Button checkoutButton = (Button) findViewById(R.id.CheckoutButton);
+//            checkoutButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.v("SELECTED DISHES SIZE : ", selectedDishes.get(0).getDishName());
+//                    Intent checkout_intent = new Intent(getApplicationContext(), CheckoutPage.class);
+//                    checkout_intent.putParcelableArrayListExtra("selectedDishes", (ArrayList<RecommendedDishResponseDAO>) selectedDishes);
+//                    startActivity(checkout_intent);
+//                }
+//            });
+
             FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v("SELECTED DISHES SIZE : ", selectedDishes.get(0).getDishName());
-                    Intent checkout_intent = new Intent(getApplicationContext(), CheckoutPage.class);
-                    checkout_intent.putParcelableArrayListExtra("selectedDishes", (ArrayList<RecommendedDishResponseDAO>) selectedDishes);
-                    startActivity(checkout_intent);
+//                    TODO
+                    if (selectedDishes.size() > 0) {
+                        Log.v("SELECTED DISHES SIZE : ", selectedDishes.get(0).getDishName());
+                        Intent checkout_intent = new Intent(getApplicationContext(), CheckoutPage.class);
+                        checkout_intent.putParcelableArrayListExtra("selectedDishes", (ArrayList<RecommendedDishResponseDAO>) selectedDishes);
+                        startActivity(checkout_intent);
+                    } else {
+//                        add something to cart first
+                        Toast toast = Toast.makeText(getBaseContext(), "Cart is empty, swipe right with S.W.A.G!", Toast.LENGTH_SHORT);
+//                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
+
                 }
             });
         }
