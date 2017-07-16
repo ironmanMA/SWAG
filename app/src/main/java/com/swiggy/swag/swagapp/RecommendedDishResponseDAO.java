@@ -1,8 +1,17 @@
 package com.swiggy.swag.swagapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by gaurav on 7/16/17.
  */
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -39,6 +48,9 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
     String dishPrice;
 
 
+    public RecommendedDishResponseDAO() {
+    }
+
     protected RecommendedDishResponseDAO(Parcel in) {
         restaurant = in.readString();
         imageUrl = in.readString();
@@ -47,9 +59,6 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
         restaurantReviewCount = in.readString();
         hotelEstimateDeliveryTime = in.readString();
         dishPrice = in.readString();
-    }
-
-    public RecommendedDishResponseDAO() {
     }
 
     public static final Creator<RecommendedDishResponseDAO> CREATOR = new Creator<RecommendedDishResponseDAO>() {
@@ -141,3 +150,4 @@ public class RecommendedDishResponseDAO implements Serializable, Cloneable, Parc
         dest.writeString(dishPrice);
     }
 }
+
