@@ -1,6 +1,7 @@
 package com.swiggy.swag.swagapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daprlabs.cardstack.SwipeDeck;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -30,9 +32,9 @@ public class SwipeDeckActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private SwipeDeck cardStack;
     private Context context = this;
-
+    Gson gson = new Gson();
     private SwipeDeckAdapter adapter;
-
+    final List<RecommendedDishResponseDAO> selectedDishes = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,12 +103,24 @@ public class SwipeDeckActivity extends AppCompatActivity {
                 v = inflater.inflate(R.layout.dish_card, parent, false);
             }
             //((TextView) v.findViewById(R.id.textView2)).setText(data.get(position));
+            TextView restaurantNametextView = (TextView) v.findViewById(R.id.restaurantNameTextView);
+            restaurantNametextView.setText("Restaurant Name : " + data.get(position).getRestaurant());
+            TextView restaurantRatingtextView = (TextView) v.findViewById(R.id.restaurantRatingTextView);
+            restaurantRatingtextView.setText("Restaurant Rating : " + data.get(position).getRestaurantRating());
+            TextView restaurantReviewCountTextView = (TextView) v.findViewById(R.id.restaurantReviewCountTextView);
+            restaurantReviewCountTextView.setText("Restaurant Review Count : " + data.get(position).getRestaurantReviewCount());
+            TextView restaurantDeliveryTimeTextView = (TextView) v.findViewById(R.id.restaurantDeliveryTimeTextView);
+            restaurantDeliveryTimeTextView.setText("Estimated delivery time : "  + data.get(position).getHotelEstimateDeliveryTime());
+            TextView foodTitleTextView = (TextView) v.findViewById(R.id.foodTitleTextView);
+            foodTitleTextView.setText("Dish Name  : "  + data.get(position).getDishName());
+            TextView foodPriceTextView = (TextView) v.findViewById(R.id.foodPriceTextView);
+            foodPriceTextView.setText("Dish cost : " + data.get(position).getDishPrice());
             ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
-            Picasso.with(context).load(R.drawable.food).fit().centerCrop().into(imageView);
-            TextView textView = (TextView) v.findViewById(R.id.sample_text);
-            //String item = (String)getItem(position);
-            textView.setText(data.get(position).getRestaurant());
-
+            String imageUrl = data.get(position).getImageUrl().toString();
+            if(imageUrl!=null)
+                Picasso.with(context).load(imageUrl).fit().centerCrop().into(imageView);
+            else
+                Picasso.with(context).load(R.drawable.food).fit().centerCrop().into(imageView);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -122,7 +136,7 @@ public class SwipeDeckActivity extends AppCompatActivity {
     private class RecommendedDishList extends AsyncTask<Void, Void, List<RecommendedDishResponseDAO>> {
 
         @Override
-        protected void onPostExecute( List<RecommendedDishResponseDAO> responseData) {
+        protected void onPostExecute( final List<RecommendedDishResponseDAO> responseData) {
             adapter = new SwipeDeckAdapter(responseData, getApplicationContext());
             cardStack.setAdapter(adapter);
 
@@ -134,11 +148,18 @@ public class SwipeDeckActivity extends AppCompatActivity {
 
                 @Override
                 public void cardSwipedRight(int position) {
+                    selectedDishes.add(responseData.get(position));
                     Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
                 }
 
                 @Override
                 public void cardsDepleted() {
+                    LayoutInflater inflater = getLayoutInflater();
+                    // normally use a viewholder
+                    ViewGroup view = (ViewGroup) findViewById(android.R.id.content);
+                    View v = inflater.inflate(R.layout.no_dish_layout,view);
+                    ImageView imageView = (ImageView) v.findViewById(R.id.not_available);
+                    Picasso.with(context).load(R.drawable.not_available).fit().centerCrop().into(imageView);
                     Log.i("MainActivity", "no more cards");
                 }
 
@@ -156,37 +177,15 @@ public class SwipeDeckActivity extends AppCompatActivity {
             cardStack.setLeftImage(R.id.left_image);
             cardStack.setRightImage(R.id.right_image);
 
-        /*
-        Button btn = (Button) findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cardStack.swipeTopCardLeft(180);
 
-            }
-        });
-        Button btn2 = (Button) findViewById(R.id.button2);
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cardStack.swipeTopCardRight(180);
-            }
-        });
-        */
             Button checkoutButton = (Button) findViewById(R.id.CheckoutButton);
             checkoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //RecommendedDishResponseDAO.add("a sample string.");
-//                ArrayList<String> newData = new ArrayList<>();
-//                newData.add("some new data");
-//                newData.add("some new data");
-//                newData.add("some new data");
-//                newData.add("some new data");
-//
-//                SwipeDeckAdapter adapter = new SwipeDeckAdapter(newData, context);
-//                cardStack.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    Log.v("SELECTED DISHES SIZE : " , selectedDishes.get(0).getDishName());
+                    Intent checkout_intent = new Intent(getApplicationContext(), CheckoutPage.class);
+                    checkout_intent.putParcelableArrayListExtra("selectedDishes", (ArrayList<RecommendedDishResponseDAO>) selectedDishes);
+                    startActivity(checkout_intent);
                 }
             });
         }
@@ -195,20 +194,20 @@ public class SwipeDeckActivity extends AppCompatActivity {
         protected List<RecommendedDishResponseDAO> doInBackground(Void... params) {
             ArrayList<RecommendedDishResponseDAO> responseData=new ArrayList<>();
             JSONParser jParser = new JSONParser();
+
+            /*Uncomment to flow data from server instead of static data*/
             //String url = "endpoint_URL";
             //String jsonStr = jParser.getJSONFromUrl(url);
-            String jsonStr = "{ \"menu_items\": [{ \"id\": 5773803, \"restaurant\": \"Truffles\", \"name\": \"Chicken, Corn, Mushroom and cheese Quiche\", \"description\": \"Quiche contains eggs.\", \"price\": 13000 }] }";
+
+            String jsonStr = "[{\"restaurantName\":\"Cream Stone\",\"restaurantRating\":\"4.1\",\"restaurantReviewCount\":\"2940\",\"restaurantDeliveryTime\":\"41\",\"foodImgSrc\":\"https://res.cloudinary.com/swiggy/image/upload/c_fill,f_auto,fl_lossy,h_152,q_auto,w_243/x3pox2gzd2xhijyfip1w\",\"foodTitle\":\"Willy Wonka\",\"foodPrice\":\"110\"}]";
             if (jsonStr != null) {
                 try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-                    JSONArray allMenuItems = jsonObj.getJSONArray("menu_items");
+                    JSONArray allMenuItems = new JSONArray(jsonStr);
+                    //JSONArray allMenuItems = jsonObj.getJSONArray("menu_items");
                     for (int i = 0; i < allMenuItems.length(); i++) {
                         JSONObject currentObject =  allMenuItems.getJSONObject(i);
-                        String id = currentObject.get("id").toString();
-                        String restaurant = currentObject.get("restaurant").toString();
-                        RecommendedDishResponseDAO recommendedDishResponseDAO=new RecommendedDishResponseDAO();
-                        recommendedDishResponseDAO.setId(id);
-                        recommendedDishResponseDAO.setRestaurant(restaurant);
+                        String jsonString  = currentObject.toString();
+                        RecommendedDishResponseDAO recommendedDishResponseDAO=gson.fromJson(jsonString,RecommendedDishResponseDAO.class);
                         responseData.add(recommendedDishResponseDAO);
                     }
                 }
