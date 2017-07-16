@@ -6,42 +6,34 @@ package com.swiggy.swag.swagapp;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import android.R;
-import android.accessibilityservice.AccessibilityService;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
-import android.view.accessibility.AccessibilityRecord;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
 
-import java.util.Locale;
+import java.util.Map;
+import java.util.PriorityQueue;
+
+import static com.swiggy.swag.swagapp.common.KeywordExtractor.findGreatest;
+import static com.swiggy.swag.swagapp.common.KeywordExtractor.intersect;
+import static com.swiggy.swag.swagapp.common.StopWordRemoval.removeStopWords;
 
 public abstract class AccessibilityEventCaptureService extends AccessibilityService {
 
     public static final int EXTRA_TYPE_NOTIFICATION = 0x19;
+    public static HashMap <String,Double> KEYWORD_CACHE = new HashMap <String,Double>();
     public static final String separator = " ";
 
     int notifyID = 1;
@@ -62,7 +54,20 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
         }
         System.out.println(final_text);
         Log.i(new Date() + " TEXT : ", final_text);
-        final_text.toString();
+
+        HashMap <String,Double> final_map= intersect(removeStopWords(final_text));
+        KEYWORD_CACHE.putAll(final_map);
+
+        if (KEYWORD_CACHE.size()>10){
+        /*
+           get top 5 of the final_map
+         */
+            List<Map.Entry<String, Double>> greatest = findGreatest(KEYWORD_CACHE, 5);
+            for (Map.Entry<String, Double> entry : greatest) {
+                // call elasticSearch here
+                System.out.println(entry);
+            }
+        }
 
 
         NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
