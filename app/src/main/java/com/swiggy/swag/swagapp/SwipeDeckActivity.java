@@ -207,7 +207,7 @@ public class SwipeDeckActivity extends AppCompatActivity {
                         String id = currentObject.get("id").toString();
                         String restaurant = currentObject.get("restaurant").toString();
                         RecommendedDishResponseDAO recommendedDishResponseDAO=new RecommendedDishResponseDAO();
-                        recommendedDishResponseDAO.setId(id);
+//                        recommendedDishResponseDAO.setId(id);
                         recommendedDishResponseDAO.setRestaurant(restaurant);
                         responseData.add(recommendedDishResponseDAO);
                     }
