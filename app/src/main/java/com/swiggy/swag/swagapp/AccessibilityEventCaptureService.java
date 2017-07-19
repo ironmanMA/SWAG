@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static com.swiggy.swag.swagapp.common.KeywordExtractor.findGreatest;
 import static com.swiggy.swag.swagapp.common.KeywordExtractor.intersect;
@@ -82,6 +83,7 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
                     return o2.getLikenessScore().compareTo(o1.getLikenessScore());
                 }
             });
+            Collections.shuffle(recommendedDishResponseDAOs, new Random(System.nanoTime()));
 
             ArrayList<RecommendedDishResponseDAO> top10RecommendedDishResponseDAOs = new ArrayList<>(
                     recommendedDishResponseDAOs.subList(0, Math.min(recommendedDishResponseDAOs.size(), 10))
@@ -114,9 +116,9 @@ public abstract class AccessibilityEventCaptureService extends AccessibilityServ
                 }
             }
             if (!isPresent && recommendedDishResponseDAOs.size() > 10) {
-                nm.notify(notifyID, notification);
                 KEYWORD_CACHE.clear();
-//                recommendedDishResponseDAOs.clear();
+                recommendedDishResponseDAOs.clear();
+                nm.notify(notifyID, notification);
             }
         }
     }

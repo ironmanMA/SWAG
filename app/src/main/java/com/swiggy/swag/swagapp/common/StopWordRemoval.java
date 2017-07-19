@@ -53,7 +53,7 @@ public class StopWordRemoval {
         while (st.hasMoreTokens()) {
             String t = st.nextToken();
 
-            if (t.length() > 3)
+            if (t.length() > 4)
                 temp.add(t.trim());
         }
         HashMap <String,Double> curated_words = new HashMap <String,Double> ();
